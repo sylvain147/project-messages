@@ -13,7 +13,7 @@ usedWords = []
 var Iconv  = require('iconv').Iconv;
 var express = require('express');
 var app = express();
-
+console.log('ok')
 var formatData = function (file) {
 	var input = fs.readFileSync(file,'UTF-8');
     	var data = JSON.parse(input)
