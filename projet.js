@@ -359,9 +359,7 @@ let second = formatData('message_2.json')
     	let result = examine(first)
     	let words = wordsExamine(result)
 app.get('/', function(req,res) {
-	console.log('here')
     	res.render('all.ejs',{results : result, wordsa: words[0], wordsb: words[1], wordsc: words[2], wordsd: words[3], wordse: words[4]});
 })
-
 
 app.listen(8080);
