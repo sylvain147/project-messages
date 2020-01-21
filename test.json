@@ -1,0 +1,30 @@
+{
+  "participants": [
+    {
+      "name": "Manon Sail'"
+    },
+    {
+      "name": "Sylvain Attoumani"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Sylvain Attoumani",
+      "timestamp_ms": 1579475365822,
+      "content": "Bonne nuit bichette",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Manon Sail'",
+      "timestamp_ms": 1579475016132,
+      "content": "Bonne fin de journée l'americain",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Manon Sail'",
+      "timestamp_ms": 1579474994435,
+      "content": "Time to sleep",
+      "type": "Generic"
+    }
+    ]
+  }
