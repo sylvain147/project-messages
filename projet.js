@@ -14,14 +14,6 @@ var Iconv  = require('iconv').Iconv;
 var express = require('express');
 var app = express();
 
-app.get('/test', function(req,res) {
-		let first = formatData('message_1.json')
-	    let second = formatData('message_2.json')
-	    first['messages'] = (first['messages'].concat(second.messages)).reverse();
-    	let result = examine(first)
-    	let words = wordsExamine(result)
-    	res.render('all.ejs');
-})
 var formatData = function (file) {
 	var input = fs.readFileSync(file,'UTF-8');
     	var data = JSON.parse(input)
@@ -37,7 +29,7 @@ var formatData = function (file) {
 		})
 		return data
 }
-var wordsExamine= function (data) {
+let wordsExamine = function(data) {
 	var tab = {
 		0 : [],
 		1 : [],
@@ -249,7 +241,7 @@ let getData = function (data) {
 	let finalUsed = []
 	data.usedWords.forEach(element => {
 		usedWords.forEach(el => {
-			if(element[0] == el[0] && el[1]>9) {
+			if(element[0] == el[0] && el[1]>20) {
 				finalUsed.push([
 					element[0],
 					element[1],
@@ -263,11 +255,14 @@ let getData = function (data) {
     	return b[2] - a[2];
 	});
 	let weeks = data.timeMessage / (1000*60*60*24*7);
+	let days = (data.timeMessage / (1000*60*60*24)) % 7
 	let perDays = []
-	console.log(data.perDay)
+	perHours =[]
 	data.perDay.forEach(element=> {
-		console.log(element)
 		perDays.push(Math.round(element/weeks))
+	})
+	data.perHour.forEach(element => {
+		perHours.push(Math.round(element/days))
 	})
 	return {
 		name : data.name,
@@ -282,7 +277,7 @@ let getData = function (data) {
 		youDictionnary : Math.round(data.youDictionnary/dictionnaryWord*100),
 		usDictionnary : Math.round(data.usDictionnary/dictionnaryWord*100),
 		perDay : perDays,
-		perHour : data.perHour,
+		perHour : perHours,
 		avgMessage : avgMessage,
 		usedWords : finalUsed,
 	}
@@ -294,7 +289,28 @@ function millisToMinutesAndSeconds(millis) {
 }
 
 function drawChart(data){
-	drawDay(data)
+
+}
+
+function drawHour(data) {
+	var trace1 = {
+  		x: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+  		y: data.firstPersonResults.perHour,
+  		name: data.firstPersonResults.name,
+  		type: "bar"
+	};
+	var trace2 = {
+  		x: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+  		y: data.secondsPersonResults.perHour,
+  		name: data.secondsPersonResults.name,
+  		type: "bar"
+	};
+	var data = [trace1, trace2];
+	var layout = {barmode: "group"};
+	var graphOptions = {layout: layout, filename: "grouped-bar", fileopt: "overwrite"};
+	plotly.plot(data, graphOptions, function (err, msg) {
+    	console.log(msg);
+	});
 }
 
 function drawDate(data) {
@@ -337,6 +353,15 @@ function drawDay(data) {
     	console.log(msg);
 	});
 }
+let first = formatData('message_1.json')
+let second = formatData('message_2.json')
+	    first['messages'] = (first['messages'].concat(second.messages)).reverse();
+    	let result = examine(first)
+    	let words = wordsExamine(result)
+app.get('/', function(req,res) {
+
+    	res.render('all.ejs',{results : result, wordsa: words[0], wordsb: words[1], wordsc: words[2], wordsd: words[3], wordse: words[4]});
+})
 
 
 app.listen(8080);
